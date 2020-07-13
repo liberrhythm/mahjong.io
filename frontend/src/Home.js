@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 // import './Home.css';
-// import io from "socket.io-client";
 import { Link as RouteLink } from "react-router-dom";
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
@@ -37,9 +36,6 @@ const useStyles = makeStyles((theme) => ({
   },
   link: {
     margin: theme.spacing(1, 1.5),
-  },
-  heroContent: {
-    padding: theme.spacing(8, 0, 6),
   },
   cardHeader: {
     backgroundColor:
