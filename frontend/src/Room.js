@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import './Room.css';
 import { useParams } from "react-router-dom";
 import io from "socket.io-client";
+import Game from './components/Game';
 
 function Room() {
     let { id } = useParams();
@@ -17,7 +17,11 @@ function Room() {
         console.log("socket disconnected");
     });
 
-    return <div>Room {id}</div>;
+    return (
+        <div>
+            Room {id}
+            <Game />
+        </div>);
 }
 
 export default Room;
