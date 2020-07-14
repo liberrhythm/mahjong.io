@@ -3,13 +3,7 @@ import React, { useState } from 'react';
 import Tile from './Tile';
 // import io from "socket.io-client";
 import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
 import { makeStyles } from '@material-ui/core/styles';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
@@ -19,45 +13,18 @@ const useStyles = makeStyles((theme) => ({
     '@global': {
 
     },
-    appBar: {
-        borderBottom: `1px solid ${theme.palette.divider}`,
-    },
-    toolbar: {
-        flexWrap: 'wrap',
-    },
-    toolbarTitle: {
-        flexGrow: 1,
-    },
-    link: {
-        margin: theme.spacing(1, 1.5),
-    },
-    cardHeader: {
-        backgroundColor:
-            theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.grey[700],
-    },
-    cardPricing: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'baseline',
-        marginBottom: theme.spacing(2),
-    },
-    footer: {
-        borderTop: `1px solid ${theme.palette.divider}`,
-        marginTop: theme.spacing(8),
-        paddingTop: theme.spacing(3),
-        paddingBottom: theme.spacing(3),
-        [theme.breakpoints.up('sm')]: {
-            paddingTop: theme.spacing(6),
-            paddingBottom: theme.spacing(6),
-        },
-    },
     gamespace: {
         backgroundColor: "#d2b48c"
+    },
+    board: {
+        height: "50vh",
+        width: "75vw",
+        backgroundColor: "white"
     }
 }));
 
 const numTiles = 18 * 2 * 4;
-let tileTypes = ["wan", "ball", "stick"];
+let tileTypes = ["wan", "bing", "tiao"];
 let allTiles = [];
 for (let i = 1; i <= 9; i++) {
     for (const tileType of tileTypes) {
@@ -71,13 +38,12 @@ tileTypes.push("word");
 const words = ["dong", "nan", "xi", "bei", "fa", "baiban", "zhong"];
 for (const word of words) {
     for (let j = 1; j <= 4; j++) {
-        allTiles.push(word);
+        allTiles.push("word-" + word);
     }
 }
 
 tileTypes.push("flower");
-for (let j = 1; j <= 4; j++) {
-    allTiles.push("flower-" + j.toString());
+for (let j = 1; j <= 8; j++) {
     allTiles.push("flower-" + j.toString());
 }
 
@@ -105,10 +71,8 @@ function Game() {
     let roll = diceRoll();
 
     const [isDealer, setIsDealer] = useState(false);
-
     const [gameTiles, setGameTiles] = useState(() => tileComponents);
     const [tilesLeft, setTilesLeft] = useState(144);
-    const [selectedTile, setSelectedTile] = useState("");
 
     const swapTile = (idx) => {
         setGameTiles(prevState => {
@@ -124,9 +88,8 @@ function Game() {
         const tile = gameTiles[tileIdx];
         swapTile(tileIdx);
         setTilesLeft(tilesLeft - 1);
-        setSelectedTile(tile);
+        return tile;
     };
-
 
     const [myGameTiles, setMyGameTiles] = useState(() => {
         const numTilesToDraw = isDealer ? 17 : 16;
@@ -143,16 +106,21 @@ function Game() {
             <CssBaseline />
             <Container className={classes.gamespace}>
                 <Grid container>
-                    <Grid container item xs={12}>
+                    <Grid container item xs={12} justify="center">
                         { gameTiles.slice(0, tilesLeft) }
                     </Grid>
-                    <Grid container item xs={12}>
+                    <Grid container item xs={12} justify="center">
+                        <div className={classes.board}></div>
+                    </Grid>
+                    <Grid container item xs={12} justify="center">
                         { myGameTiles }
+                        <Button href="#" color="primary" variant="contained"
+                                onClick={() => { let tile = selectTile(); setMyGameTiles([...myGameTiles, tile]); }}>
+                                get tile
+                        </Button>
                     </Grid>
                 </Grid>
-                <Button href="#" color="primary" variant="outlined" 
-                        onClick={() => selectTile()}>get tile</Button>
-                <div>{ selectedTile }</div>
+                
             </Container>
         </>
     );
